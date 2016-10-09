@@ -2,10 +2,10 @@ var fs = require('fs')
 var execFileSync = require('child_process').execFileSync
 var rimraf = require('rimraf')
 var electronPackager = require('electron-packager')
-var appdmg = require('appdmg')
 var packageMsi = require('msi-packager')
 var path = require('path')
 var sign = require('electron-osx-sign')
+var appdmg = process.platform === 'darwin' ? require('appdmg') : null
 
 var buildFrom = __dirname + '/app'
 var appPackage = require(buildFrom + '/package.json')
@@ -51,7 +51,7 @@ function packageRelease (err) {
       packageForLinux('ia32')
     }
 
-    if (arch === 'ia32' || arch === 'all') {
+    if (arch === 'x64' || arch === 'all') {
       packageForLinux('x64')
     }
   }
@@ -128,11 +128,12 @@ function packageForWindows (arch) {
 function packageForLinux (arch) {
   console.log('Creating zip')
   var buildPath = __dirname + '/build/Ferment-linux-' + arch
-  var outputPath = __dirname + '/releases/Ferment v' + appPackage.version + '-linux-' + arch + '.zip'
+  var outputPath = __dirname + '/releases/Ferment-v' + appPackage.version + '-linux-' + arch + '.zip'
   rimraf.sync(outputPath)
-  rimraf.sync(buildPath + '/LICENSE')
-  fs.writeFileSync(buildPath + '/LICENSE-AGPL-3.0.txt', fs.readFileSync(buildFrom + '/LICENSE-AGPL-3.0.txt'))
+  fs.writeFileSync(buildPath + '/LICENSE', fs.readFileSync(buildFrom + '/LICENSE'))
   fs.writeFileSync(buildPath + '/README.md', fs.readFileSync(buildFrom + '/README.md'))
+  fs.writeFileSync(buildPath + '/version', appPackage.version)
+
   execFileSync('zip', ['-r', '-X', outputPath, 'Ferment-linux-' + arch], {
     cwd: __dirname + '/build'
   })
