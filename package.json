@@ -1,11 +1,11 @@
 {
-  "name": "loopjs-packager",
+  "name": "ferment-packager",
   "version": "0.0.0",
   "private": true,
   "author": "Matt McKegg",
   "main": "main.js",
   "scripts": {
-    "upload": "scp releases/Loop\\ Drop\\ v`cd ../loop-drop-app && npv`* dev@loopjs.com:loop/loopjs-www/files/"
+    "update": "cd app && git pull && npm install"
   },
   "dependencies": {
     "cpr": "^0.4.1",
