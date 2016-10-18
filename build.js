@@ -35,7 +35,8 @@ electronPackager({
     'node_modules/sodium-prebuilt/deps',
     'node_modules/leveldown/deps',
     'node_modules/fsevents',
-    'node_modules/node-gyp'
+    'node_modules/node-gyp',
+    'bin/ffmpeg-linux-x64'
   ]
 }, packageRelease)
 
